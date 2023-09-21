@@ -50,15 +50,20 @@ def generate_test_class(func, test_specs, float_tolerance):
     return type(f'Test_{func.__name__}', (unittest.TestCase,), tests)
 
 
-def generate_test_suite(test_suite_specs, module_name=None, float_tolerance=1.e-7):
-    if not module_name:
-        module = sys.modules['__main__']
-    elif Path(module_name).exists():
-        sys.path.append(str(Path(module_name).parent))
-        module = importlib.import_module(Path(module_name).stem)
-    else:
-        module = importlib.import_module(module_name)
+def get_module(name=None):
+    if not name:
+        return sys.modules['__main__']
 
+    path = Path(name)
+    if path.exists():
+        sys.path.append(str(path.parent))
+        name = path.stem
+
+    return importlib.import_module(name)
+
+
+def generate_test_suite(test_suite_specs, module_name=None, float_tolerance=1.e-7):
+    module = get_module(module_name)
     suite = unittest.TestSuite()
     for func_name, test_specs in test_suite_specs.items():
         func = getattr(module, func_name)
@@ -72,6 +77,7 @@ def generate_test_suite_from_json_file(json_file, module_name, float_tolerance=1
     with open(json_file, 'r') as f:
         test_suite_specs = json.load(f)
     return generate_test_suite(test_suite_specs, module_name, float_tolerance)
+
 
 
 def run_json_tests(json_file, module_name, float_tolerance=1.e-7, verbosity=0):
