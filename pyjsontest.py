@@ -63,10 +63,10 @@ def generate_test_suite(test_suite_specs, module_name=None, float_tolerance=1.e-
         suite.addTest(test_class_suite)
     return suite
 
-def generate_test_suite_from_json_file(json_file, float_tolerance, module_name):
+def generate_test_suite_from_json_file(json_file, module_name, float_tolerance=1.e-7):
     with open(json_file, 'r') as f:
         test_suite_specs = json.load(f)
-    return generate_test_suite(test_suite_specs, float_tolerance, module_name)
+    return generate_test_suite(test_suite_specs, module_name, float_tolerance)
     
 
 if __name__ == '__main__':
