@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='pyjsontest',
-    pymodules=['pyjsontest'],
+    py_modules=['pyjsontest'],
     version='0.1.4',
     description='Run unit tests based on a JSON file',
     install_requires=['numpy'],
