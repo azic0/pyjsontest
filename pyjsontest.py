@@ -63,11 +63,18 @@ def generate_test_suite(test_suite_specs, module_name=None, float_tolerance=1.e-
         suite.addTest(test_class_suite)
     return suite
 
+
 def generate_test_suite_from_json_file(json_file, module_name, float_tolerance=1.e-7):
     with open(json_file, 'r') as f:
         test_suite_specs = json.load(f)
     return generate_test_suite(test_suite_specs, module_name, float_tolerance)
-    
+
+
+def run_json_tests(json_file, module_name, float_tolerance=1.e-7, verbosity=0):
+    test_suite = generate_test_suite_from_json_file(json_file, module_name, float_tolerance)
+    unittest.TextTestRunner(verbosity=verbosity).run(test_suite)
+
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Run tests based on a JSON file and optional module name.")
@@ -79,6 +86,5 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
 
-    test_suite = generate_test_suite_from_json_file(args.json_file, args.module, args.ftol)
-    unittest.TextTestRunner(verbosity=args.verbosity).run(test_suite)
+    run_json_tests(args.json_file, args.module, args.ftol, args.verbosity)
 
