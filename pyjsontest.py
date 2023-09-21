@@ -52,6 +52,9 @@ def generate_test_class(func, test_specs, float_tolerance):
 def generate_test_suite(test_suite_specs, module_name=None, float_tolerance=1.e-7):
     if not module_name:
         module = sys.modules['__main__']
+    elif Path(module_name).exists():
+        sys.path.append(Path(module_name).parent)
+        module = importlib.import_module(module_name)
     else:
         module = importlib.import_module(module_name)
 
